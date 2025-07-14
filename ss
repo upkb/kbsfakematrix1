@@ -1,3 +1,15 @@
+local StarterGui = game:GetService("StarterGui")
+
+local function showNotification(title, text, duration)
+    StarterGui:SetCore("SendNotification", {
+        Title = title or "Notification";
+        Text = text or "";
+        Duration = duration or 1; -- seconds
+    })
+end
+
+showNotification("†", "Made By Upkb.", 1.5)
+
 -- SETTINGS
 getgenv().AimEnabled = true
 getgenv().AimKey = Enum.KeyCode.Q
@@ -199,6 +211,3 @@ LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
 if LocalPlayer.Character then
     onCharacterAdded(LocalPlayer.Character)
 end
-
-]]
-loadstring(scriptContent)()

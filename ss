@@ -46,20 +46,7 @@ local function getValidPart(char)
     return nil
 end
 
--- WALL CHECK (L)
-local function isVisible(targetPart)
-    local origin = Camera.CFrame.Position
-    local direction = (targetPart.Position - origin).Unit * (targetPart.Position - origin).Magnitude
-
-    local raycastParams = RaycastParams.new()
-    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-    raycastParams.FilterDescendantsInstances = {LocalPlayer.Character, targetPart.Parent}
-
-    local result = workspace:Raycast(origin, direction, raycastParams)
-    return result == nil
-end
-
--- Get closest player to mouse cursor with wall check
+-- Get closest player to mouse cursor WITHOUT wall check
 local function getClosestToCursor()
     local closestPlayer = nil
     local closestDistance = math.huge
@@ -67,7 +54,7 @@ local function getClosestToCursor()
     for _, player in ipairs(Players:GetPlayers()) do
         if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 then
             local part = getValidPart(player.Character)
-            if part and isVisible(part) then -- WALL CHECK (L)
+            if part then -- Removed wall check here
                 local screenPos, onScreen = Camera:WorldToViewportPoint(part.Position)
                 if onScreen then
                     local dist = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
@@ -120,11 +107,11 @@ UIS.InputBegan:Connect(function(input, gpe)
     end
 end)
 
--- AIM LOOP WITH WALL CHECK (L)
+-- AIM LOOP WITHOUT WALL CHECK
 RunService.RenderStepped:Connect(function()
     if getgenv().AimEnabled and Locked and Target and Target.Character then
         local part = getValidPart(Target.Character)
-        if part and isVisible(part) then -- WALL CHECK (L)
+        if part then -- Removed wall check here
             local predictionTime = getgenv().AutoPrediction and getPing() or getgenv().ManualPrediction
             local predictedPos = part.Position + part.Velocity * predictionTime
             local aimCFrame = CFrame.new(Camera.CFrame.Position, predictedPos)

@@ -10,6 +10,37 @@ end
 
 showNotification("†", "Made By Upkb.", 1.5)
 
+-- LocalScript (placed in StarterGui → ScreenGui)
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+
+local player = Players.LocalPlayer
+
+-- Paste your invite link here:
+local DISCORD_INVITE = "https://discord.gg/Z5JnbNQayM"
+
+-- Function to show a notification
+local function showNotification(title, text, duration)
+    StarterGui:SetCore("SendNotification", {
+        Title = title;
+        Text = text;
+        Duration = duration or 1;
+    })
+end
+
+-- Perform the steps on game load
+-- Wrap in a `Delay` in case clipboard isn't ready immediately
+task.defer(function()
+    -- Try to copy the invite link to clipboard
+    local success, err = pcall(function()
+        setclipboard(DISCORD_INVITE)
+    end)
+    
+    if success then
+        showNotification("†", "Discord Invite Link Has Been Copied", 1.5)
+    end
+end)
+
 -- SETTINGS
 getgenv().AimEnabled = true
 getgenv().AimKey = Enum.KeyCode.Q
@@ -126,7 +157,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- SPEED SCRIPT
-local speed = 270
+local speed = 150
 local humanoid
 local speedEnabled = false
 local speedConnection
@@ -211,3 +242,4 @@ LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
 if LocalPlayer.Character then
     onCharacterAdded(LocalPlayer.Character)
 end
+
